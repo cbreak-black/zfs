@@ -23,6 +23,7 @@ libspl_la_SOURCES = \
 	mkdirp.c \
 	strnlen.c \
 	timestamp.c \
+	zmount.c \
 	zone.c \
 	xdr.c \
 	asm-generic/atomic.S \

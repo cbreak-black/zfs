@@ -91,4 +91,9 @@
  */
 #define	MS_OVERLAY	0x00000004
 
+#define	MS_RDONLY	0x0001	/* Read-only */
+#define	MS_OPTIONSTR	0x0100	/* Data is an in/out option string */
+#define	MS_NOMNTTAB	0x0800	/* Don't show mount in mnttab */
+
+
 #endif /* _LIBSPL_SYS_MOUNT_H */
