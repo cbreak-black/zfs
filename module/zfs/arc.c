@@ -2676,12 +2676,15 @@ arc_reclaim_needed(void)
 }
 
 
-#if defined (__OPPLE__) && defined(_KERNEL)
+#if defined (__APPLE__) && defined(_KERNEL)
 extern kern_return_t mach_vm_pressure_monitor(
          boolean_t       wait_for_pressure,
          unsigned int    nsecs_monitored,
          unsigned int    *pages_reclaimed_p,
          unsigned int    *pages_wanted_p);
+#endif
+
+#if defined (__OPPLE__) && defined(_KERNEL)
 static void
 arc_vmpressure_thread(void *dummy __unused)
 {

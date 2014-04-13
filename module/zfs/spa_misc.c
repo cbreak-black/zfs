@@ -52,6 +52,10 @@
 #include "zfs_prop.h"
 #include "zfeature_common.h"
 
+#ifndef _KERNEL
+#include <signal.h>
+#endif
+
 /*
  * SPA locking
  *
