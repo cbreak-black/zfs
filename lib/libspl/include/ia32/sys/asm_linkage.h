@@ -175,7 +175,6 @@ extern "C" {
  */
 #define	ANSI_PRAGMA_WEAK(sym, stype)	\
 	.weak	sym; \
-	.type sym, @stype; \
 /* CSTYLED */ \
 sym	= _/**/sym
 
@@ -185,7 +184,6 @@ sym	= _/**/sym
  */
 #define	ANSI_PRAGMA_WEAK2(sym1, sym2, stype)	\
 	.weak	sym1; \
-	.type sym1, @stype; \
 sym1	= sym2
 
 /*
@@ -197,21 +195,18 @@ sym1	= sym2
 	.text; \
 	.align	ASM_ENTRY_ALIGN; \
 	.globl	x; \
-	.type	x, @function; \
 x:	MCOUNT(x)
 
 #define	ENTRY_NP(x) \
 	.text; \
 	.align	ASM_ENTRY_ALIGN; \
 	.globl	x; \
-	.type	x, @function; \
 x:
 
 #define	RTENTRY(x) \
 	.text; \
 	.align	ASM_ENTRY_ALIGN; \
 	.globl	x; \
-	.type	x, @function; \
 x:	RTMCOUNT(x)
 
 /*
@@ -221,8 +216,6 @@ x:	RTMCOUNT(x)
 	.text; \
 	.align	ASM_ENTRY_ALIGN; \
 	.globl	x, y; \
-	.type	x, @function; \
-	.type	y, @function; \
 /* CSTYLED */ \
 x:	; \
 y:	MCOUNT(x)
@@ -231,8 +224,6 @@ y:	MCOUNT(x)
 	.text; \
 	.align	ASM_ENTRY_ALIGN; \
 	.globl	x, y; \
-	.type	x, @function; \
-	.type	y, @function; \
 /* CSTYLED */ \
 x:	; \
 y:
@@ -243,7 +234,6 @@ y:
  */
 #define	ALTENTRY(x) \
 	.globl x; \
-	.type	x, @function; \
 x:
 
 /*
@@ -259,16 +249,12 @@ x:
 #define	DGDEF2(name, sz) \
 	.data; \
 	.globl	name; \
-	.type	name, @object; \
-	.size	name, sz; \
 name:
 
 #define	DGDEF3(name, sz, algn) \
 	.data; \
 	.align	algn; \
 	.globl	name; \
-	.type	name, @object; \
-	.size	name, sz; \
 name:
 
 #define	DGDEF(name)	DGDEF3(name, 4, 4)
@@ -276,8 +262,7 @@ name:
 /*
  * SET_SIZE trails a function and set the size for the ELF symbol table.
  */
-#define	SET_SIZE(x) \
-	.size	x, [.-x]
+#define	SET_SIZE(x)
 
 /*
  * NWORD provides native word value.
