@@ -1,6 +1,6 @@
 include $(top_srcdir)/config/Rules.am
-AM_CPPFLAGS += -I$(top_srcdir)/include
-LDADD = $(top_srcdir)/lib/libicp/libicp.la
+AM_CPPFLAGS += -I$(top_srcdir)/../include
+LDADD = $(top_srcdir)/../lib/libicp/.libs/libicp.a
 
 AUTOMAKE_OPTIONS = subdir-objects
 

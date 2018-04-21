@@ -1,5 +1,6 @@
 SUBDIRS  = zfs-tests/tests/functional/ctime
 SUBDIRS += zfs-tests/tests/functional/exec
+SUBDIRS += zfs-tests/tests/functional/checksum
 SUBDIRS += zfs-tests/cmd/chg_usr_exec
 SUBDIRS += zfs-tests/cmd/mktree
 SUBDIRS += zfs-tests/cmd/file_write
