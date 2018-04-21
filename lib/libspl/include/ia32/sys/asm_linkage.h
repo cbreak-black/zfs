@@ -194,19 +194,25 @@ sym1	= sym2
 #define	ENTRY(x) \
 	.text; \
 	.align	ASM_ENTRY_ALIGN; \
+	.globl	_##x; \
 	.globl	x; \
+_##x:	; \
 x:	MCOUNT(x)
 
 #define	ENTRY_NP(x) \
 	.text; \
 	.align	ASM_ENTRY_ALIGN; \
+	.globl	_##x; \
 	.globl	x; \
+_##x:	; \
 x:
 
 #define	RTENTRY(x) \
 	.text; \
 	.align	ASM_ENTRY_ALIGN; \
+	.globl	_##x; \
 	.globl	x; \
+_##x:	; \
 x:	RTMCOUNT(x)
 
 /*
@@ -233,7 +239,9 @@ y:
  * ALTENTRY provides for additional entry points.
  */
 #define	ALTENTRY(x) \
+	.globl	_##x; \
 	.globl x; \
+_##x:	; \
 x:
 
 /*
