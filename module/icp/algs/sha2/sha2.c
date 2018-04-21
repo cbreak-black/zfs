@@ -53,7 +53,7 @@ static void Encode(uint8_t *, uint32_t *, size_t);
 static void Encode64(uint8_t *, uint64_t *, size_t);
 
 /* userspace only supports the generic version */
-#if	defined(__amd64) && defined(_KERNEL)
+#if	defined(__amd64) && 1
 #define	SHA512Transform(ctx, in) SHA512TransformBlocks((ctx), (in), 1)
 #define	SHA256Transform(ctx, in) SHA256TransformBlocks((ctx), (in), 1)
 
@@ -143,7 +143,7 @@ static uint8_t PADDING[128] = { 0x80, /* all zeros */ };
 #endif	/* _BIG_ENDIAN */
 
 
-#if	!defined(__amd64) || !defined(_KERNEL)
+#if	!defined(__amd64) || !1
 /* SHA256 Transform */
 
 static void
@@ -842,7 +842,7 @@ SHA2Update(SHA2_CTX *ctx, const void *inptr, size_t input_len)
 			i = buf_len;
 		}
 
-#if !defined(__amd64) || !defined(_KERNEL)
+#if !defined(__amd64) || !1
 		if (algotype <= SHA256_HMAC_GEN_MECH_INFO_TYPE) {
 			for (; i + buf_limit - 1 < input_len; i += buf_limit) {
 				SHA256Transform(ctx, &input[i]);
