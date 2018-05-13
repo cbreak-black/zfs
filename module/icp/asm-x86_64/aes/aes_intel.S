@@ -145,6 +145,10 @@
  * For the x86 64-bit architecture, OpenSolaris OS uses ks32 instead of ks64.
  *
  * Note2: aes_ks_t must be aligned on a 0 mod 128 byte boundary.
+ * ====================================================================
+ * Mac OS X modifications
+ * 1. Removed CR0.TS / STTS / CLTS since the XNU kernel can apparently use floating point
+ * registers without this.
  *
  * ====================================================================
  */
@@ -182,7 +186,7 @@ rijndael_key_setup_dec_intel(uint32_t rk[], const uint32_t cipherKey[],
 #define _ASM
 #include <sys/asm_linkage.h>
 
-#ifdef _KERNEL
+#if defined(_KERNEL) && !defined(__APPLE__)
 	/*
 	 * Note: the CLTS macro clobbers P2 (%rsi) under i86xpv.  That is,
 	 * it calls HYPERVISOR_fpu_taskswitch() which modifies %rsi when it
@@ -208,7 +212,7 @@ rijndael_key_setup_dec_intel(uint32_t rk[], const uint32_t cipherKey[],
 	testq	$CR0_TS, tmpreg; \
 	jnz	1f; \
 	and	$-XMM_ALIGN, %rsp; \
-	sub	$[XMM_SIZE * 2], %rsp; \
+	sub	$(XMM_SIZE * 2), %rsp; \
 	movaps	%xmm0, 16(%rsp); \
 	movaps	%xmm1, (%rsp); \
 	jmp	2f; \
@@ -243,7 +247,7 @@ rijndael_key_setup_dec_intel(uint32_t rk[], const uint32_t cipherKey[],
 	testq	$CR0_TS, tmpreg; \
 	jnz	1f; \
 	and	$-XMM_ALIGN, %rsp; \
-	sub	$[XMM_SIZE * 7], %rsp; \
+	sub	$(XMM_SIZE * 7), %rsp; \
 	movaps	%xmm0, 96(%rsp); \
 	movaps	%xmm1, 80(%rsp); \
 	movaps	%xmm2, 64(%rsp); \
