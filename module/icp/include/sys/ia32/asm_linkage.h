@@ -102,7 +102,7 @@ extern "C" {
 #error	"inconsistent mask constants"
 #endif
 
-#define	ASM_ENTRY_ALIGN	16
+#define	ASM_ENTRY_ALIGN	4, 0x90
 
 /*
  * SSE register alignment and save areas
@@ -110,6 +110,7 @@ extern "C" {
 
 #define	XMM_SIZE	16
 #define	XMM_ALIGN	16
+#define	XMM_ALIGN_LOG	4, 0x90
 
 #if defined(__amd64)
 

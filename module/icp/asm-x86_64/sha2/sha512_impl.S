@@ -121,7 +121,7 @@ ENTRY_NP(SHA512TransformBlocks)
 	mov	8*7(%rdi),%r11
 	jmp	.Lloop
 
-.align	16
+.align	4, 0x90
 .Lloop:
 	xor	%rdi,%rdi
 	mov	8*0(%rsi),%r12
@@ -861,7 +861,7 @@ ENTRY_NP(SHA512TransformBlocks)
 
 	add	%r14,%rax			# h+=Maj(a,b,c)
 	jmp	.Lrounds_16_xx
-.align	16
+.align	4, 0x90
 .Lrounds_16_xx:
 	mov	8(%rsp),%r13
 	mov	112(%rsp),%r12
@@ -2037,7 +2037,7 @@ ENTRY_NP(SHA512TransformBlocks)
 	ret
 SET_SIZE(SHA512TransformBlocks)
 
-.align	16
+.align	4, 0x90
 K512:
 	.quad	0x428a2f98d728ae22,0x7137449123ef65cd
 	.quad	0xb5c0fbcfec4d3b2f,0xe9b5dba58189dbbc

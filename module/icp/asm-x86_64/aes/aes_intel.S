@@ -306,7 +306,7 @@ rijndael_key_setup_dec_intel(uint32_t rk[], const uint32_t cipherKey[],
  * (%rcx)	AES key
  */
 
-.align	16
+.align	4, 0x90
 _key_expansion_128:
 _key_expansion_256a:
 	pshufd	$0b11111111, %xmm1, %xmm1
@@ -321,7 +321,7 @@ _key_expansion_256a:
 	SET_SIZE(_key_expansion_128)
 	SET_SIZE(_key_expansion_256a)
 
-.align 16
+.align 4, 0x90
 _key_expansion_192a:
 	pshufd	$0b01010101, %xmm1, %xmm1
 	shufps	$0b00010000, %xmm0, %xmm4
@@ -346,7 +346,7 @@ _key_expansion_192a:
 	ret
 	SET_SIZE(_key_expansion_192a)
 
-.align 16
+.align 4, 0x90
 _key_expansion_192b:
 	pshufd	$0b01010101, %xmm1, %xmm1
 	shufps	$0b00010000, %xmm0, %xmm4
@@ -366,7 +366,7 @@ _key_expansion_192b:
 	ret
 	SET_SIZE(_key_expansion_192b)
 
-.align 16
+.align 4, 0x90
 _key_expansion_256b:
 	pshufd	$0b10101010, %xmm1, %xmm1
 	shufps	$0b00010000, %xmm2, %xmm4
