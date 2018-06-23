@@ -270,6 +270,49 @@ void expand_disk_to_zfs(char *devname, int len)
 	}
 }
 
+/*
+ * Given "POOL/dataset", fetch the bsd name name "diskXsY".
+ */
+int zfs_osx_proxy_get_bsdname(char const * dataset, char * bsdname, int len)
+{
+	/*
+	 * Create the matching dictionary for class.
+	 * Add property and value to match dict.
+	 */
+	CFMutableDictionaryRef matching = IOServiceMatching("ZFSDataset");
+	CFMutableDictionaryRef matchingProperties = CFDictionaryCreateMutable(kCFAllocatorDefault, 0,
+		&kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+	CFStringRef datasetCF = CFStringCreateWithCString(0, dataset, kCFStringEncodingUTF8);
+	CFDictionarySetValue(matchingProperties, CFSTR("ZFS Dataset"), datasetCF);
+	CFDictionarySetValue(matching, CFSTR(kIOPropertyMatchKey), matchingProperties);
+	CFRelease(datasetCF);
+	CFRelease(matchingProperties);
+
+	/*
+	 * Search fir the service with the given ZFS Dataset name, consumes one ref of the
+	 * passed matching dict.
+	 */
+	io_service_t service = IOServiceGetMatchingService(kIOMasterPortDefault,
+		matching);
+
+	if (IO_OBJECT_NULL == service)
+	{
+		return ENOENT;
+	}
+
+	CFStringRef bsdNameCF = IORegistryEntryCreateCFProperty(service,
+		CFSTR("BSD Name"), kCFAllocatorDefault, 0);
+	IOObjectRelease(service);
+
+	if (bsdNameCF)
+	{
+		CFStringGetCString(bsdNameCF, bsdname, len, kCFStringEncodingUTF8);
+		CFRelease(bsdNameCF);
+		return 0;
+	}
+	return ENOENT;
+}
+
 
 
 void
@@ -394,10 +437,23 @@ getmntany(FILE *fd __unused, struct mnttab *mgetp, struct mnttab *mrefp)
 	if (error != 0)
 		return (error);
 
+	// Proxy path handling.
+	// This is probably not the right place to add this functionality, but IOKit
+	// code is already found in this file, and it is not easily accessible by the
+	// caller.
+	char bsdname[MAXPATHLEN] = "/dev/";
+	if (zfs_osx_proxy_get_bsdname(mrefp->mnt_special, bsdname + 5, MAXPATHLEN - 5) != 0)
+	{
+		bsdname[0] = '\0';
+	}
+
 	for (i = 0; i < allfs; i++) {
 		if (mrefp->mnt_special != NULL &&
 		    strcmp(mrefp->mnt_special, gsfs[i].f_mntfromname) != 0) {
-			continue;
+			if (strcmp(bsdname, gsfs[i].f_mntfromname) != 0)
+			{
+				continue;
+			}
 		}
 		if (mrefp->mnt_mountp != NULL &&
 		    strcmp(mrefp->mnt_mountp, gsfs[i].f_mntonname) != 0) {
